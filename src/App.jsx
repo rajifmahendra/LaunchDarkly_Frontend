@@ -1,38 +1,44 @@
 import { useEffect, useState } from "react";
+import { useFlags, useLDClient } from "launchdarkly-react-client-sdk";
 
 function App() {
-    const [bannerVersion, setBannerVersion] = useState("A");
+    const flags = useFlags(); // Ambil semua flags dari LaunchDarkly
+    const ldClient = useLDClient();
+    const [backendMessage, setBackendMessage] = useState("");
+    const [isReady, setIsReady] = useState(false);
 
-    // Generate user key unik untuk setiap pengguna
     useEffect(() => {
-        let userKey = localStorage.getItem("user-key");
-        if (!userKey) {
-            userKey = `user-${Math.floor(Math.random() * 10000)}`; // Buat user key acak
-            localStorage.setItem("user-key", userKey);
+        if (ldClient) {
+            ldClient.waitForInitialization().then(() => {
+                setIsReady(true);
+            });
         }
 
-        fetch(`http://localhost:3000/promo-banner?user=${userKey}`)
+        fetch("http://localhost:3000/dashboard?user=browser-user")
             .then(res => res.json())
-            .then(data => setBannerVersion(data.bannerVersion))
+            .then(data => setBackendMessage(data.dashboard))
             .catch(err => console.error("Error fetching feature flag:", err));
-    }, []);
+    }, [ldClient]);
+
+    console.log("Feature Flags from LaunchDarkly:", flags);
+    console.log("Flags received:", Object.keys(flags));
+    console.log("Value of newDashboard flag:", flags?.newDashboard);
 
     return (
         <div>
-            <h1>Welcome to Our Website</h1>
+            <h1>Welcome to Our Platform</h1>
 
-            {/* Banner berdasarkan varian */}
-            <div
-                style={{
-                    background: bannerVersion === "B" ? "yellow" : "lightblue",
-                    padding: "15px",
-                    textAlign: "center",
-                    fontSize: "20px",
-                    color: "black",
-                }}
-            >
-                🎉 Special Promo Version {bannerVersion} is Live Now! 🎉
-            </div>
+            {/* UI Dari Backend */}
+            <p>{backendMessage}</p>
+
+            {/* UI Dari Frontend */}
+            {!isReady ? (
+                <h2>🔄 Loading LaunchDarkly...</h2>
+            ) : flags?.newDashboard ? (
+                <h2>🚀 New Dashboard is Enabled! 🚀</h2>
+            ) : (
+                <h2>📌 Old Dashboard is Active 📌</h2>
+            )}
         </div>
     );
 }
