@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useUser } from "../context/usercontext";
 
 function Transfer() {
-  const { userId } = useUser(); // Ambil userId dari Context
+  const { user } = useUser(); // Ambil userId dari Context
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState("");
@@ -14,7 +14,7 @@ function Transfer() {
     setSuccess("");
     setResponseData(null);
 
-    const currentUserId = userId || localStorage.getItem("userId");
+    const currentUserId = user.ID || localStorage.getItem("userId");
     if (!currentUserId) {
       setError("User ID is missing. Please log in again.");
       setLoading(false);

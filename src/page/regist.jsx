@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { useUser } from "../context/UserContext"; // Import Context
+import { useUser } from "../context/usercontext";
+import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 
 function Regist() {
-  const { setUserId } = useUser(); // Ambil setter userId dari Context
+  const userContext = useUser();
+  const { setUser } = useUser();
+  const navigate = useNavigate(); // ✅ Gunakan useNavigate untuk redirect
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    savings: 0, // Default sebagai number
+    savings: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -15,7 +18,7 @@ function Regist() {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === "savings" ? Number(value) : value, // Konversi ke number hanya untuk savings
+      [name]: name === "savings" ? Number(value) : value,
     });
   };
 
@@ -32,7 +35,7 @@ function Regist() {
         },
         body: JSON.stringify({
           ...formData,
-          savings: Number(formData.savings), // Pastikan savings tetap number saat dikirim
+          savings: Number(formData.savings),
         }),
       });
 
@@ -41,10 +44,12 @@ function Regist() {
       }
 
       const data = await response.json();
-      console.log(data)
-      setUserId(data.ID);
+      console.log(data);
+      setUser(data);
       localStorage.setItem("userId", data.ID);
       alert("Registration successful! User ID: " + data.ID);
+
+      navigate("/"); // ✅ Redirect ke halaman utama setelah sukses
     } catch (err) {
       setError(err.message);
     } finally {

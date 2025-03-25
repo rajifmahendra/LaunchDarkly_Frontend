@@ -5,10 +5,10 @@ const UserContext = createContext();
 
 // Provider untuk membungkus aplikasi
 export function UserProvider({ children }) {
-  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
 
   return (
-    <UserContext.Provider value={{ userId, setUserId }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );
