@@ -12,7 +12,7 @@ useEffect(() => {
         localStorage.setItem("user-key", userKey);
     }
 
-    fetch(`http://localhost:3000/promo-banner?user=${userKey}`)
+    fetch(`http://13.212.48.92:4005/promo-banner?user=${userKey}`)
         .then(res => res.json())
         .then(data => setBannerVersion(data.bannerVersion))
         .catch(err => console.error("Error fetching feature flag:", err));
