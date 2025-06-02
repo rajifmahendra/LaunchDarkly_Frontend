@@ -31,6 +31,10 @@ function AppContent() {
 
   return (
     <Router>
+      {/* Tambahan Test 1 */}
+    <div style={{ padding: "8px", backgroundColor: "#f0f0f0", textAlign: "center" }}>
+      Only Test
+    </div>
     <div style={{ display: "flex", width: "100%", padding: "16px", backgroundColor: "#E5E7EB" }}>
       {["/banner", "/regist", "/transfer"].map((path) => (
         (path !== "/transfer" || paymentFlag) && (
