@@ -29,7 +29,7 @@ function Regist() {
     setError("");
 
     try {
-      const response = await fetch("http://13.212.48.92:4005/users", {
+      const response = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
