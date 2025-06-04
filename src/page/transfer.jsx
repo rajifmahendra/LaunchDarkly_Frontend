@@ -22,7 +22,7 @@ function Transfer() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/transfer/${currentUserId}`, {
+      const response = await fetch(`https://7eca-202-65-229-116.ngrok-free.app/transfer/${currentUserId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

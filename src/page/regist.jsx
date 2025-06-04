@@ -29,7 +29,7 @@ function Regist() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/users", {
+      const response = await fetch("https://7eca-202-65-229-116.ngrok-free.app/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
