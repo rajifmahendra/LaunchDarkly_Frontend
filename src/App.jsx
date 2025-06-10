@@ -70,7 +70,7 @@ function AppContent() {
           path="/" 
           element={
             <div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
-              {user ? <h1>Hello {user.name}</h1> : <h1>Chopenteries</h1>}
+              {user ? <h1>Hello {user.name}</h1> : <h1>Where is the theats?</h1>}
             </div>
           
           } 
