@@ -1,16 +1,25 @@
-import { withLDProvider } from "launchdarkly-react-client-sdk";
+import { LDProvider } from 'launchdarkly-react-client-sdk';
 
-const LaunchDarklyWrapper = ({ children }) => {
+const LaunchDarklyProvider = ({ children }) => {
+  const context = {
+    kind: 'user',
+    key: 'browser-user',
+    name: 'Guest User',
+  };
 
-
-  const LaunchDarklyProvider = withLDProvider({
-    clientSideID: import.meta.env.VITE_LD_CLIENT_ID,
-    user: { anonymous: true },
-    options: { streaming: true },
-  })(({ children }) => children);
-
-
-  return <LaunchDarklyProvider>{children}</LaunchDarklyProvider>;
+  return (
+    <LDProvider
+      clientSideID={import.meta.env.VITE_LD_CLIENT_ID}
+      context={context}
+      options={{
+        streaming: true,
+        useCamelCaseFlagKeys: true,  // kunci stabil flag key mapping
+        bootstrap: "localStorage",
+      }}
+    >
+      {children}
+    </LDProvider>
+  );
 };
 
-export default LaunchDarklyWrapper;
+export default LaunchDarklyProvider;
