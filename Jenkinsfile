@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        CONTAINER_NAME = 'launchdarkly_backend'
+        CONTAINER_NAME = 'launchdarkly_frontend'
         CHECKMARX_INSTALLATION = 'CxAST CLI'
         CHECKMARX_BASE_URL = 'https://anz.ast.checkmarx.net'
         CHECKMARX_TENANT = 'nfr-izeno'
