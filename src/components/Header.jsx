@@ -5,7 +5,7 @@ function Header() {
         <h1 className="text-xl font-bold">ConnectOn</h1>
         <div className="flex items-center gap-2">
           <div className="bg-white rounded-full w-3 h-3 animate-pulse"></div>
-          <span>rajif</span>
+          <span>chopenteries</span>
         </div>
       </div>
     </div>
