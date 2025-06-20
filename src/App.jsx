@@ -7,12 +7,14 @@ import Plans from './components/Plans';
 import FeatureDisabled from './components/FeatureDisabled';
 import LoadingState from './components/LoadingState';
 import FormPembelian from './components/FormPembelian';
+import BannerPromo from './components/BannerPromo';
 
 function App() {
   const flags = useFlags();
   const ldClient = useLDClient();
   const [isReady, setIsReady] = useState(false);
   const [kuotaFlag, setKuotaFlag] = useState(false);
+  const showPromoBanner = flags?.showPromoBanner;
 
   useEffect(() => {
     if (ldClient) {
@@ -33,6 +35,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start p-6">
       <Header />
+      {showPromoBanner && <BannerPromo />} {/* ✨ tampil jika flag aktif */}
       <Routes>
         <Route path="/" element={
           !isReady ? <LoadingState /> : kuotaFlag ? (
