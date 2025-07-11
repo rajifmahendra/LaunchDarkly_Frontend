@@ -8,7 +8,8 @@ function Plans() {
   const flags = useFlags();
   const ldClient = useLDClient();
 
-  const disable100GB = flags?.disable100gbPlan;
+  // ✅ Flag name harus sama persis dengan yang di LaunchDarkly dashboard (case sensitive)
+  const disableqouta = flags?.disableqouta; // <- ini sudah benar
   const globalKuotaFlag = flags?.feKoutaInternet;
   const showMalaysiaPremium = flags?.flagPremiumMalaysia;
 
@@ -18,9 +19,13 @@ function Plans() {
         const response = await axios.get("http://13.229.82.178:4000/api/getQuota");
         let availablePlans = response.data.available;
 
+        // Flag global, kalau false kosongkan semua
         if (globalKuotaFlag === false) {
           availablePlans = [];
-        } else if (disable100GB === true) {
+        }
+
+        // Flag disableqouta, kalau true hilangkan 100GB
+        if (disableqouta === true) {
           availablePlans = availablePlans.filter(plan => plan.data !== "100GB");
         }
 
@@ -31,11 +36,11 @@ function Plans() {
     };
 
     fetchPlans();
-  }, [disable100GB, globalKuotaFlag]);
+  }, [disableqouta, globalKuotaFlag]);
 
   return (
     <div className="w-full max-w-5xl space-y-10">
-      {/* Malaysia Promo Section */}
+      {/* 🇲🇾 Malaysia Promo Section */}
       {showMalaysiaPremium && (
         <div className="bg-green-50 p-6 rounded-lg border border-green-200">
           <h2 className="text-xl font-semibold mb-4 text-green-700">🇲🇾 Malaysia Promo</h2>
@@ -56,7 +61,7 @@ function Plans() {
         </div>
       )}
 
-      {/* Available Data Plans */}
+      {/* 📦 Available Data Plans */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Available Data Plans</h2>
         {plans.length === 0 ? (
@@ -66,7 +71,7 @@ function Plans() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {plans
-              .filter(plan => plan.data !== "150GB")
+              .filter(plan => plan.data !== "150GB") // 150GB khusus promo Malaysia
               .map((plan, index) => (
                 <PlanCard key={index} quota={plan.data} />
               ))}
