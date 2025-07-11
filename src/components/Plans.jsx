@@ -15,7 +15,7 @@ function Plans() {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await axios.get("http://54.179.244.21:4000/api/getQuota");
+        const response = await axios.get("http://13.229.82.178:4000/api/getQuota");
         let availablePlans = response.data.available;
 
         if (globalKuotaFlag === false) {

@@ -15,7 +15,7 @@ function FormPembelian() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://54.179.244.21:4000/api/postQuota', formData);
+      await axios.post('http://13.229.82.178:4000/api/postQuota', formData);
       setSubmitSuccess(true);
       setFormData({ nama: '', email: '', no_hp: '', kuota: kuota });
     } catch (error) {
