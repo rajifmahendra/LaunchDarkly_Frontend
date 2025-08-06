@@ -6,36 +6,40 @@ const LaunchDarklyProvider = ({ children }) => {
   const [context, setContext] = useState(null);
 
   useEffect(() => {
-    const fetchContext = async () => {
+  const fetchContext = async () => {
+    try {
+      let country = 'Unknown';
+
       try {
-        const res = await axios.get('https://ipapi.co/json/');
-        const country = res.data.country_name || 'Unknown';
-
-        const ua = navigator.userAgent;
-        let device = 'Unknown';
-        if (ua.includes('Chrome')) device = 'Chrome';
-        if (ua.includes('Safari') && !ua.includes('Chrome')) device = 'Safari';
-
-        const fullContext = {
-          kind: 'user',
-          key: 'browser-user',
-          name: 'Guest User',
-          country,
-          custom: { 
-            device
-          }
-        };
-
-        console.log("🧠 LaunchDarkly context:", fullContext);
-        setContext(fullContext);
-
+        const res = await axios.get('https://api.country.is');
+        country = res.data.country_name || 'Unknown';
       } catch (err) {
-        console.error('❌ Failed to detect context:', err);
+        console.warn('🌐 IP lookup failed, using default country.');
       }
-    };
 
-    fetchContext();
-  }, []);
+      const ua = navigator.userAgent;
+      let device = 'Unknown';
+      if (ua.includes('Edg')) device = 'Edge';
+      else if (ua.includes('Chrome')) device = 'Chrome';
+      else if (ua.includes('Safari') && !ua.includes('Chrome')) device = 'Safari';
+
+      const fullContext = {
+        kind: 'user',
+        key: 'browser-user',
+        name: 'Guest User',
+        country,
+        custom: { device }
+      };
+
+      console.log("🧠 LaunchDarkly context:", fullContext);
+      setContext(fullContext);
+    } catch (err) {
+      console.error('❌ Failed to detect context:', err);
+    }
+  };
+
+  fetchContext();
+}, []);
 
   if (!context) return null;
 

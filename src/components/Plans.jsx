@@ -8,10 +8,16 @@ function Plans() {
   const flags = useFlags();
   const ldClient = useLDClient();
 
-  // ✅ Flag name harus sama persis dengan yang di LaunchDarkly dashboard (case sensitive)
-  const disableqouta = flags?.disableqouta; // <- ini sudah benar
+  // ✅ PASTIKAN semua flag name sesuai dengan LaunchDarkly Dashboard
+  const disableqouta = flags?.disableqouta;           // ✅ lowercase
   const globalKuotaFlag = flags?.feKoutaInternet;
   const showMalaysiaPremium = flags?.flagPremiumMalaysia;
+
+  // ✅ Debug print flags
+  console.log("✅ FLAG VALUES:");
+  console.log("disableqouta:", disableqouta);
+  console.log("feKoutaInternet:", globalKuotaFlag);
+  console.log("flagPremiumMalaysia:", showMalaysiaPremium);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -19,12 +25,12 @@ function Plans() {
         const response = await axios.get("http://13.229.82.178:4000/api/getQuota");
         let availablePlans = response.data.available;
 
-        // Flag global, kalau false kosongkan semua
+        // 🔁 Filtering berdasarkan flag global kuota
         if (globalKuotaFlag === false) {
           availablePlans = [];
         }
 
-        // Flag disableqouta, kalau true hilangkan 100GB
+        // 🔁 Sembunyikan 100GB jika disableqouta aktif
         if (disableqouta === true) {
           availablePlans = availablePlans.filter(plan => plan.data !== "100GB");
         }
@@ -71,7 +77,7 @@ function Plans() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {plans
-              .filter(plan => plan.data !== "150GB") // 150GB khusus promo Malaysia
+              .filter(plan => plan.data !== "150GB") // 150GB khusus promo
               .map((plan, index) => (
                 <PlanCard key={index} quota={plan.data} />
               ))}
